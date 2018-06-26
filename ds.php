@@ -2,8 +2,8 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "root";
-	$dbpassword = "password";
+	$dbusername = "jyepe";
+	$dbpassword = "9373yepe";
 	$dbname = "mydb";
 
 	//what method to execute
