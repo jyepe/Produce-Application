@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity
             data += "&" + URLEncoder.encode("method", "UTF-8") + "="
                     + URLEncoder.encode("login", "UTF-8");
 
-            //String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
-            String serverResponse = sendPostData.execute("http://192.168.1.220/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
+            //String serverResponse = sendPostData.execute("http://192.168.1.220/ds.php", data).get();
 
             Log.i("test", serverResponse);
             checkLoginResponse(serverResponse);
