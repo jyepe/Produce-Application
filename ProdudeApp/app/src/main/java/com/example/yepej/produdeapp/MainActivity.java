@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity
             data += "&" + URLEncoder.encode("method", "UTF-8") + "="
                     + URLEncoder.encode("login", "UTF-8");
 
-            String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
+            //String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://192.168.1.220/ds.php", data).get();
+
             Log.i("test", serverResponse);
             checkLoginResponse(serverResponse);
         }
@@ -68,13 +70,18 @@ public class MainActivity extends AppCompatActivity
 
     private void checkLoginResponse(String serverResponse)
     {
-        if (serverResponse.contains("false"))
+        if (serverResponse.toLowerCase().contains("connection failed"))
         {
-            Toast.makeText(this, "Incorrect login information", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error Connecting to the server", Toast.LENGTH_LONG).show();
+            return;
         }
-        else
+        if (serverResponse.contains("login successful"))
         {
             Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
+        }
+        else if (serverResponse.contains("wrong credentials") || serverResponse.contains("user does not exist"))
+        {
+            Toast.makeText(this, "Incorrect login information", Toast.LENGTH_LONG).show();
         }
     }
     //endregion
