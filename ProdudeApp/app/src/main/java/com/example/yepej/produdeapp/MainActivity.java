@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,27 @@ public class MainActivity extends AppCompatActivity
     public void signUpClicked(View control)
     {
         setContentView(R.layout.sign_up);
+    }
+
+    public void finishClicked(View control)
+    {
+        EditText uid = ((EditText) findViewById(R.id.uid));
+        EditText pw = ((EditText) findViewById(R.id.pw));
+        EditText compName = ((EditText) findViewById(R.id.compName));
+
+        PostSender postSender = new PostSender();
+
+        try
+        {
+            String data = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(uid.getText().toString(), "UTF-8");
+
+            data += "&" + URLEncoder.encode("pw", "UTF-8") + "=" + URLEncoder.encode(pw.getText().toString(), "UTF-8");
+            data += "&" + URLEncoder.encode("comp", "UTF-8") + "=" + URLEncoder.encode(uid.getText().toString(), "UTF-8");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     //region Login

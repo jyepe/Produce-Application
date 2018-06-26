@@ -20,56 +20,82 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Company Name..."/>
+            android:hint="Company Name..."
+            android:id="@+id/compName"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Name..."/>
+            android:hint="Name..."
+            android:id="@+id/name"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Address..."/>
+            android:hint="Address..."
+            android:id="@+id/adress"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="City..."/>
+            android:hint="City..."
+            android:id="@+id/city"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="State..."/>
+            android:hint="State..."
+            android:id="@+id/state"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Zip..."/>
+            android:hint="Zip..."
+            android:id="@+id/zip"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Phone..."/>
+            android:hint="Phone..."
+            android:id="@+id/phone"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Email..."/>
+            android:hint="Email..."
+            android:id="@+id/email"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Userename..."
+            android:id="@+id/uid"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Password..."
+            android:id="@+id/pw"/>
 
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text="Finish"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/finishButton"
+        android:onClick="finishClicked"/>
 
 
 </RelativeLayout>
