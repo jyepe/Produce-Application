@@ -10,9 +10,65 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yepej.produdeapp.MainActivity">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="buttonClicked"
-        android:text="button"/>
+        android:text="Company Name goes here"
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/usernameText"
+            android:hint="Username"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/passwordText"
+            android:hint="Password"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="loginClick"
+            android:text="Login"
+            android:id="@+id/loginButton"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="signUpClicked"
+            android:text="Sign up"
+            android:id="@+id/signUpButton" />
+
+    </LinearLayout>
+
+
 </RelativeLayout>
