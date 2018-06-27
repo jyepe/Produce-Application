@@ -2,8 +2,8 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "jyepe";
-	$dbpassword = "9373yepe";
+	$dbusername = "root";
+	$dbpassword = "password";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -19,10 +19,6 @@
 	{
 	    die("connection failed");
 	}
-	else
-	{
-		//echo "database connection successful";
-	}
 
 
 	function createUser()
@@ -32,8 +28,10 @@
 		$username = urldecode($_POST['username']) ;
 		$password = urldecode($_POST['password']) ;
 		$name = urldecode($_POST['name']) ;
-		$address = urldecode($_POST['address']) ;
+		$address1 = urldecode($_POST['address1']) ;
+		$address2 = urldecode($_POST['address2']) ;
 		$city = urldecode($_POST['city']) ;
+		$county = urldecode($_POST['county']) ;
 		$state = urldecode($_POST['state']) ;
 		$zip = urldecode($_POST['zip']) ;
 		$phone = urldecode($_POST['phone']) ;
@@ -41,12 +39,38 @@
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		//todo add columns of the DB
 
-		$sql = "INSERT INTO CUSTOMERS (COMPANY_NAME, UID, PASSWORD, CONTACT_NAME, ADDRESS1, CITY, STATE, ZIP, PHONE, EMAIL) 
-				VALUES ('$compName', '$username', '$hashed_password', '$name', '$address', '$city', '$state', '$zip', '$phone', '$email')";
+		$sql = "INSERT INTO
+					CUSTOMERS
+						(COMPANY_NAME
+						, UID
+						, PASSWORD
+						, CONTACT_NAME
+						, ADDRESS1
+						, ADDRESS2
+						, CITY
+						, COUNTY
+						, STATE
+						, ZIP
+						, PHONE
+						, EMAIL)
+				VALUES
+					('$compName'
+					, '$username'
+					, '$hashed_password'
+					, '$name'
+					, '$address1'
+					, '$address2'
+					, '$city'
+					, '$county'
+					, '$state'
+					, '$zip'
+					, '$phone'
+					, '$email')
+					";
 
 		if ($conn->query($sql) === TRUE) 
 		{
-		    echo "New record created successfully";
+		    echo "user created successfully";
 		} 
 		else 
 		{
