@@ -21,16 +21,40 @@
 	}
 	else
 	{
-		echo "database connection successful";
+		//echo "database connection successful";
 	}
 
 
 	function createUser()
 	{
 		global $conn;
+		$compName = urldecode($_POST['compName']) ;
 		$username = urldecode($_POST['username']) ;
 		$password = urldecode($_POST['password']) ;
+		$name = urldecode($_POST['name']) ;
+		$address = urldecode($_POST['address']) ;
+		$city = urldecode($_POST['city']) ;
+		$state = urldecode($_POST['state']) ;
+		$zip = urldecode($_POST['zip']) ;
+		$phone = urldecode($_POST['phone']) ;
+		$email = urldecode($_POST['email']) ;
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+		//todo add columns of the DB
+
+		$sql = "INSERT INTO CUSTOMERS (COMPANY_NAME, UID, PASSWORD, CONTACT_NAME, ADDRESS1, CITY, STATE, ZIP, PHONE, EMAIL) 
+				VALUES ('$compName', '$username', '$hashed_password', '$name', '$address', '$city', '$state', '$zip', '$phone', '$email')";
+
+		if ($conn->query($sql) === TRUE) 
+		{
+		    echo "New record created successfully";
+		} 
+		else 
+		{
+		    echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
+		$conn->close();
+
 		var_dump($hashed_password);
 	}
 	
@@ -78,6 +102,10 @@
 	if ($method == 'login')
 	{
 		checkLogin();
+	}
+	else if ($method == 'addUser')
+	{
+		createUser();
 	}
 
 ?>

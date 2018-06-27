@@ -27,6 +27,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
+            android:hint="Userename..."
+            android:id="@+id/uid"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Password..."
+            android:id="@+id/pw"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
             android:hint="Name..."
             android:id="@+id/name"/>
 
@@ -71,20 +85,6 @@
             android:inputType="textPersonName"
             android:hint="Email..."
             android:id="@+id/email"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Userename..."
-            android:id="@+id/uid"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Password..."
-            android:id="@+id/pw"/>
 
     </LinearLayout>
 

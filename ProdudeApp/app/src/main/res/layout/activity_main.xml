@@ -61,6 +61,13 @@
             android:id="@+id/loginButton"
             android:layout_alignParentBottom="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OR"
+            android:layout_marginLeft="30dp"
+            android:textColor="@android:color/black" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
