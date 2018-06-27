@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity
 {
 
+    //final ipAddress = "192.168.1.109";
+    final String serverIP = "192.168.1.220";
     final String encodeFormat = "UTF-8";
 
     @Override
@@ -36,6 +38,15 @@ public class MainActivity extends AppCompatActivity
         EditText compName = ((EditText) findViewById(R.id.compName));
         EditText uid = ((EditText) findViewById(R.id.uid));
         EditText pw = ((EditText) findViewById(R.id.pw));
+        EditText name = ((EditText) findViewById(R.id.name));
+        EditText address1 = ((EditText) findViewById(R.id.address1));
+        EditText address2 = ((EditText) findViewById(R.id.address2));
+        EditText city = ((EditText) findViewById(R.id.city));
+        EditText county = ((EditText) findViewById(R.id.county));
+        EditText state = ((EditText) findViewById(R.id.state));
+        EditText zip = ((EditText) findViewById(R.id.zip));
+        EditText phone = ((EditText) findViewById(R.id.phone));
+        EditText email = ((EditText) findViewById(R.id.email));
         PostSender sendPostData = new PostSender();
         Boolean sendData = checkRequiredFields(compName, uid, pw);
 
@@ -44,18 +55,26 @@ public class MainActivity extends AppCompatActivity
 
             try
             {
-                // TODO: 6/26/2018 Send the rest of the data 
                 String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("addUser", encodeFormat);
 
                 data += "&" + URLEncoder.encode("compName", encodeFormat) + "=" + URLEncoder.encode(compName.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("username", encodeFormat) + "=" + URLEncoder.encode(uid.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("password", encodeFormat) + "=" + URLEncoder.encode(pw.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("name", encodeFormat) + "=" + URLEncoder.encode(name.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("address1", encodeFormat) + "=" + URLEncoder.encode(address1.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("address2", encodeFormat) + "=" + URLEncoder.encode(address2.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("county", encodeFormat) + "=" + URLEncoder.encode(county.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("city", encodeFormat) + "=" + URLEncoder.encode(city.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("state", encodeFormat) + "=" + URLEncoder.encode(state.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("zip", encodeFormat) + "=" + URLEncoder.encode(zip.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("phone", encodeFormat) + "=" + URLEncoder.encode(phone.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("email", encodeFormat) + "=" + URLEncoder.encode(email.getText().toString(), encodeFormat);
 
-                String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
 
-                if (serverResponse.contains("created")) {
-                    Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                }
+                String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+                Toast.makeText(this, serverResponse, Toast.LENGTH_SHORT).show();
+                checkLoginResponse(serverResponse);
+
             }
             catch (Exception e)
             {
@@ -109,8 +128,7 @@ public class MainActivity extends AppCompatActivity
             data += "&" + URLEncoder.encode("method", "UTF-8") + "="
                     + URLEncoder.encode("login", "UTF-8");
 
-            String serverResponse = sendPostData.execute("http://192.168.1.109/ds.php", data).get();
-            //String serverResponse = sendPostData.execute("http://192.168.1.220/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
             checkLoginResponse(serverResponse);
         }
         catch (Exception e)
@@ -124,9 +142,11 @@ public class MainActivity extends AppCompatActivity
         if (serverResponse.toLowerCase().contains("connection failed"))
         {
             Toast.makeText(this, "Error Connecting to the server", Toast.LENGTH_LONG).show();
-            return;
         }
-        if (serverResponse.contains("login successful"))
+        else if (serverResponse.contains("user created successfully")) {
+            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
+        }
+        else if (serverResponse.contains("login successful"))
         {
             Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
         }
