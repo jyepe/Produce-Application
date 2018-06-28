@@ -1,23 +1,32 @@
 
 package com.example.yepej.produdeapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
 {
 
-    //final ipAddress = "192.168.1.109";
-    final String serverIP = "192.168.1.220";
+    // TODO: 6/27/2018 state text field should be dropdown with all states
+    //// TODO: 6/27/2018 some text fields have specific controls for them. Exmaple the email and phone field
+    //                   have specific controls for them. Switch current controls for those.
+    //                   This can be done in the XML. Change the inputType property for the control
+
+    //final String serverIP = "192.168.1.220";
+    final String serverIP = "192.168.1.109";
     final String encodeFormat = "UTF-8";
 
     @Override
@@ -27,7 +36,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
     }
 
-
+    //region Sign up
     public void signUpClicked(View control)
     {
         setContentView(R.layout.sign_up);
@@ -72,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
-                Toast.makeText(this, serverResponse, Toast.LENGTH_SHORT).show();
+                Log.i("test", serverResponse);
                 checkLoginResponse(serverResponse);
 
             }
@@ -97,6 +106,8 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
+
+    //endregion
 
     //region Login
     public void loginClick(View control)

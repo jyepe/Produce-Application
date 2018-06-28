@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Company Name goes here"
+        android:text="Green Seasons"
         android:textSize="30sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -50,8 +50,9 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp">
+        android:layout_marginBottom="33dp">
 
         <Button
             android:layout_width="wrap_content"

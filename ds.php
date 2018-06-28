@@ -2,8 +2,8 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "root";
-	$dbpassword = "password";
+	$dbusername = "jyepe";
+	$dbpassword = "9373yepe";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -37,7 +37,6 @@
 		$phone = urldecode($_POST['phone']) ;
 		$email = urldecode($_POST['email']) ;
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-		//todo add columns of the DB
 
 		$sql = "INSERT INTO
 					CUSTOMERS
@@ -74,6 +73,7 @@
 		} 
 		else 
 		{
+			//todo return "user is already created" or similar message
 		    echo "Error: " . $sql . "<br>" . $conn->error;
 		}
 
