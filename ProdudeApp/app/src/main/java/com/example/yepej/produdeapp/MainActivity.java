@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +24,9 @@ public class MainActivity extends AppCompatActivity
 {
 
     // TODO: 6/27/2018 state text field should be dropdown with all states
-    //// TODO: 6/27/2018 some text fields have specific controls for them. Exmaple the email and phone field
-    //                   have specific controls for them. Switch current controls for those.
-    //                   This can be done in the XML. Change the inputType property for the control
 
-    //final String serverIP = "192.168.1.220";
-    final String serverIP = "192.168.1.109";
+    final String serverIP = "192.168.1.220";
+    //final String serverIP = "192.168.1.109";
     final String encodeFormat = "UTF-8";
 
     @Override
@@ -34,12 +34,35 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //create a list of items for the spinner.
+        String[] states = new String[]{"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC",
+                "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",
+                "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",
+                "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC",
+                "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"};
     }
+
+
+
+
 
     //region Sign up
     public void signUpClicked(View control)
     {
         setContentView(R.layout.sign_up);
+    }
+
+    public void formatPhone (View control)
+    {
+        EditText phone = ((EditText) findViewById(R.id.phone));
+        String phoneNumber = phone.getText().toString();
+
+        String text = String.valueOf( android.telephony.PhoneNumberUtils.formatNumber(phoneNumber) ); //formatted: 123-456-7890
+
+        phone.setText(text); //set editText text equal to new formatted number
+
+        phone.setSelection(text.length()); //move cursor to end of editText view
     }
 
     public void finishClicked (View control)
@@ -156,6 +179,10 @@ public class MainActivity extends AppCompatActivity
         }
         else if (serverResponse.contains("user created successfully")) {
             Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
+        }
+        else if (serverResponse.contains("user already exists"))
+        {
+            Toast.makeText(this, "Username is already in use", Toast.LENGTH_LONG).show();
         }
         else if (serverResponse.contains("login successful"))
         {
