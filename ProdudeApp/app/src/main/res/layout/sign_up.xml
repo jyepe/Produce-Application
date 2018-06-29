@@ -79,12 +79,20 @@
                 android:hint="County..."
                 android:inputType="textPersonName" />
 
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#d11f08"
+                android:entries="@android:string/no"
+                android:padding="5dp" />
+
             <EditText
                 android:id="@+id/state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="State..."
-                android:inputType="textPersonName" />
+                android:inputType="text|textPersonName" />
 
             <EditText
                 android:id="@+id/zip"
@@ -97,15 +105,17 @@
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ems="10"
                 android:hint="Phone..."
-                android:inputType="textPersonName" />
+                android:inputType="phone" />
 
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ems="10"
                 android:hint="Email..."
-                android:inputType="textPersonName" />
+                android:inputType="textEmailAddress" />
 
             <Button
                 android:layout_width="wrap_content"
