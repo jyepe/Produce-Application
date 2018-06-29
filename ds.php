@@ -2,8 +2,10 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "jyepe";
-	$dbpassword = "9373yepe";
+	//$dbusername = "jyepe";
+	//$dbpassword = "9373yepe";
+	$dbusername = "root";
+	$dbpassword = "password";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -38,48 +40,62 @@
 		$email = urldecode($_POST['email']) ;
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-		$sql = "INSERT INTO
-					CUSTOMERS
-						(COMPANY_NAME
-						, UID
-						, PASSWORD
-						, CONTACT_NAME
-						, ADDRESS1
-						, ADDRESS2
-						, CITY
-						, COUNTY
-						, STATE
-						, ZIP
-						, PHONE
-						, EMAIL)
-				VALUES
-					('$compName'
-					, '$username'
-					, '$hashed_password'
-					, '$name'
-					, '$address1'
-					, '$address2'
-					, '$city'
-					, '$county'
-					, '$state'
-					, '$zip'
-					, '$phone'
-					, '$email')
-					";
+		$sqlCheck = "SELECT * FROM CUSTOMERS WHERE UID = '$username'";
 
-		if ($conn->query($sql) === TRUE) 
+		$hashedPass = '';
+
+		$result = $conn->query($sqlCheck);
+
+
+		if ($result->num_rows > 0)
 		{
-		    echo "user created successfully";
-		} 
-		else 
+			echo "user already exists";
+		}
+		else
 		{
-			//todo return "user is already created" or similar message
-		    echo "Error: " . $sql . "<br>" . $conn->error;
+			$sql = "INSERT INTO
+						CUSTOMERS
+							(COMPANY_NAME
+							, UID
+							, PASSWORD
+							, CONTACT_NAME
+							, ADDRESS1
+							, ADDRESS2
+							, CITY
+							, COUNTY
+							, STATE
+							, ZIP
+							, PHONE
+							, EMAIL)
+					VALUES
+						('$compName'
+						, '$username'
+						, '$hashed_password'
+						, '$name'
+						, '$address1'
+						, '$address2'
+						, '$city'
+						, '$county'
+						, '$state'
+						, '$zip'
+						, '$phone'
+						, '$email')
+						";
+
+			if ($conn->query($sql) === TRUE) 
+			{
+				echo "user created successfully";
+			} 
+			else 
+			{
+				echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+
+			$conn->close();
+
+			var_dump($hashed_password);
 		}
 
-		$conn->close();
-
-		var_dump($hashed_password);
 	}
 	
 	function checkLogin ()
