@@ -1,11 +1,15 @@
 package com.example.yepej.produdeapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
@@ -13,6 +17,7 @@ import java.net.URLEncoder;
 public class Sign_up extends AppCompatActivity
 {
 
+    String selectedState = "";
     final String serverIP = "192.168.1.220";
     //final String serverIP = "192.168.1.109";
     final String encodeFormat = "UTF-8";
@@ -22,6 +27,23 @@ public class Sign_up extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        Spinner spinner = (Spinner) findViewById(R.id.state);
+
+        AdapterView.OnItemSelectedListener hi = new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long text) {
+                if (!parent.getItemAtPosition(pos).toString().equals("State..."))
+                { selectedState = parent.getItemAtPosition(pos).toString(); }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+
+        spinner.setOnItemSelectedListener(hi);
     }
 
     //region Sign up
@@ -49,7 +71,6 @@ public class Sign_up extends AppCompatActivity
         EditText address2 = ((EditText) findViewById(R.id.address2));
         EditText city = ((EditText) findViewById(R.id.city));
         EditText county = ((EditText) findViewById(R.id.county));
-        //EditText state = ((EditText) findViewById(R.id.state));
         EditText zip = ((EditText) findViewById(R.id.zip));
         EditText phone = ((EditText) findViewById(R.id.phone));
         EditText email = ((EditText) findViewById(R.id.email));
@@ -71,12 +92,13 @@ public class Sign_up extends AppCompatActivity
                 data += "&" + URLEncoder.encode("address2", encodeFormat) + "=" + URLEncoder.encode(address2.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("county", encodeFormat) + "=" + URLEncoder.encode(county.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("city", encodeFormat) + "=" + URLEncoder.encode(city.getText().toString(), encodeFormat);
-                //data += "&" + URLEncoder.encode("state", encodeFormat) + "=" + URLEncoder.encode(state.getText().toString(), encodeFormat);
+                data += "&" + URLEncoder.encode("state", encodeFormat) + "=" + URLEncoder.encode(selectedState, encodeFormat);
                 data += "&" + URLEncoder.encode("zip", encodeFormat) + "=" + URLEncoder.encode(zip.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("phone", encodeFormat) + "=" + URLEncoder.encode(phone.getText().toString(), encodeFormat);
                 data += "&" + URLEncoder.encode("email", encodeFormat) + "=" + URLEncoder.encode(email.getText().toString(), encodeFormat);
 
 
+                showMessageBox(selectedState);
                 String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
                 Log.i("test", serverResponse);
                 checkLoginResponse(serverResponse);
@@ -122,4 +144,31 @@ public class Sign_up extends AppCompatActivity
             Toast.makeText(this, "Username is already in use", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void showMessageBox(String message)
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(message);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
 }
