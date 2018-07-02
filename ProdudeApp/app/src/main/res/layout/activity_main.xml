@@ -10,21 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yepej.produdeapp.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Green Seasons"
-        android:textSize="30sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="84dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp">
+        android:id="@+id/linearLayout">
 
         <EditText
             android:layout_width="wrap_content"
@@ -33,7 +27,10 @@
             android:ems="10"
             android:layout_centerHorizontal="true"
             android:id="@+id/usernameText"
-            android:hint="Username"/>
+            android:hint="Username"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textCursorDrawable="@drawable/cursor_color"
+            />
 
         <EditText
             android:layout_width="wrap_content"
@@ -42,17 +39,20 @@
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/passwordText"
-            android:hint="Password"/>
-    </LinearLayout>
+            android:hint="Password"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textCursorDrawable="@drawable/cursor_color"
+            />
 
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp">
+        android:layout_marginTop="77dp">
 
         <Button
             android:layout_width="wrap_content"
