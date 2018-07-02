@@ -88,9 +88,6 @@ public class MainActivity extends AppCompatActivity
         {
             Toast.makeText(this, "Error Connecting to the server", Toast.LENGTH_LONG).show();
         }
-        else if (serverResponse.contains("user created successfully")) {
-            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
-        }
         else if (serverResponse.contains("user already exists"))
         {
             Toast.makeText(this, "Username is already in use", Toast.LENGTH_LONG).show();
@@ -98,6 +95,8 @@ public class MainActivity extends AppCompatActivity
         else if (serverResponse.contains("login successful"))
         {
             Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
+            Intent myIntent = new Intent(this, OrderOption.class);
+            startActivity(myIntent);
         }
         else if (serverResponse.contains("wrong credentials") || serverResponse.contains("user does not exist"))
         {

@@ -1,5 +1,6 @@
 package com.example.yepej.produdeapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -113,18 +114,12 @@ public class Sign_up extends AppCompatActivity
         }
         else if (serverResponse.contains("user created successfully")) {
             Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(this, OrderOption.class);
+            startActivity(myIntent);
         }
         else if (serverResponse.contains("user already exists"))
         {
             Toast.makeText(this, "Username is already in use", Toast.LENGTH_LONG).show();
-        }
-        else if (serverResponse.contains("login successful"))
-        {
-            Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
-        }
-        else if (serverResponse.contains("wrong credentials") || serverResponse.contains("user does not exist"))
-        {
-            Toast.makeText(this, "Incorrect login information", Toast.LENGTH_LONG).show();
         }
     }
 }
