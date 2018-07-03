@@ -2,10 +2,10 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	//$dbusername = "jyepe";
-	//$dbpassword = "9373yepe";
-	$dbusername = "root";
-	$dbpassword = "password";
+	$dbusername = "jyepe";
+	$dbpassword = "9373yepe";
+	//$dbusername = "root";
+	//$dbpassword = "password";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -137,6 +137,57 @@
 
 	}
 
+	function getItems()
+	{
+		global $conn;
+
+		$sql = "SELECT * FROM INVENTORY";
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+			echo "start";
+
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+        		echo $row["NAME"]. ",";
+    		}
+
+    		echo "end";
+		} 
+		else 
+		{
+		    echo "0 results";
+		}
+
+		$conn->close();
+	}
+
+	function getUser()
+	{
+		global $conn;
+		$userName = urldecode($_POST['uid']) ;
+
+		$sql = "SELECT CONTACT_NAME FROM CUSTOMERS WHERE UID = '$userName'";
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+        		echo $row["CONTACT_NAME"];
+    		}
+		} 
+		else 
+		{
+		    echo "0 results";
+		}
+
+		$conn->close();
+	}
+
 
 
 	if ($method == 'login')
@@ -146,6 +197,14 @@
 	else if ($method == 'addUser')
 	{
 		createUser();
+	}
+	else if ($method == 'getItems')
+	{
+		getItems();
+	}
+	else if ($method == 'getUser')
+	{
+		getUser();
 	}
 
 ?>

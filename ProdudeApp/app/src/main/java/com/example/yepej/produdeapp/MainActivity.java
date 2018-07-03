@@ -28,9 +28,11 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
 {
-    final String serverIP = "192.168.1.220";
+    //final String serverIP = "192.168.1.220";
     //final String serverIP = "192.168.1.109";
+    final String serverIP = "10.1.10.72";
     final String encodeFormat = "UTF-8";
+    String userContactName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -97,13 +99,38 @@ public class MainActivity extends AppCompatActivity
         else if (serverResponse.contains("login successful"))
         {
             Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
+            getUser();
             Intent myIntent = new Intent(this, OrderOption.class);
+            myIntent.putExtra("contactName", getUser());
             startActivity(myIntent);
         }
         else if (serverResponse.contains("wrong credentials") || serverResponse.contains("user does not exist"))
         {
             Toast.makeText(this, "Incorrect login information", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String getUser()
+    {
+        PostSender sendPostData = new PostSender();
+        EditText uid = ((EditText) findViewById(R.id.usernameText));
+
+        try
+        {
+            String data = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("getUser", "UTF-8");
+
+            data += "&" + URLEncoder.encode("uid", "UTF-8") + "="
+                    + URLEncoder.encode(uid.getText().toString(), "UTF-8");
+
+            String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+            userContactName = serverResponse;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return userContactName;
     }
     //endregion
 
