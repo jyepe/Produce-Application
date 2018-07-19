@@ -3,9 +3,12 @@ package com.example.yepej.produdeapp;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -35,10 +38,15 @@ public class ItemList extends AppCompatActivity
 
     //I have the item list activity set to the default activity to skip the login. In your IDE go to
     //run menu and edit configurations and select this activity as default for testing
-    // TODO: 7/12/2018 Spinner needs a listner to capture when user selects an item
-    // TODO: 7/12/2018 When item is selected change the corresponding textView color
     // TODO: 7/12/2018 When spinner is scrolled off screen it resets the value of spinner (This is due to the getView method in the custom adapter class getting called and resetting values. We need to find a way to save the state of the spinner)
     // TODO: 7/12/2018 Any other bugs in here you find
+
+
+    static class ViewHolder
+    {
+        TextView holderText;
+        Spinner holderSpinner;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,19 +56,10 @@ public class ItemList extends AppCompatActivity
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
 
+
         getItems();
         CustomAdapter adapter = new CustomAdapter(itemList);
         listView.setAdapter(adapter);
-
-
-
-
-
-    }
-
-    private void setSpinnerListner(Spinner qtySpinner, final TextView qtyText)
-    {
-
     }
 
     //Gets all inventory items from DB
@@ -126,15 +125,29 @@ public class ItemList extends AppCompatActivity
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            convertView = getLayoutInflater().inflate(R.layout.custom_layout, null);
+            ViewHolder holder = null;
 
+            if (convertView == null)
+            {
+                convertView = getLayoutInflater().inflate(R.layout.custom_layout, null);
+                holder = new ViewHolder();
 
-            TextView qtyText = ((TextView) convertView.findViewById(R.id.text));
-            Spinner qtySpinner = ((Spinner) convertView.findViewById(R.id.spinner));
-            qtyText.setText(items[position]);
-            //setSpinnerListner(qtySpinner, qtyText);
+                holder.holderText = ((TextView) convertView.findViewById(R.id.text));
+                holder.holderSpinner = ((Spinner) convertView.findViewById(R.id.spinner));
+
+                convertView.setTag(holder);
+            }
+            else
+            {
+                holder = ((ViewHolder) convertView.getTag());
+            }
+
+            holder.holderText.setText(items[position]);
+
             return convertView;
         }
+
+
     }
     //endregion
 }

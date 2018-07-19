@@ -19,8 +19,8 @@ public class Sign_up extends AppCompatActivity
 
     String selectedState = "";
     //final String serverIP = "192.168.1.220";
-    final String serverIP = "192.168.1.109";
-    //final String serverIP = "10.1.10.72";
+    //final String serverIP = "192.168.1.109";
+    final String serverIP = "10.1.10.72";
     final String encodeFormat = "UTF-8";
 
     @Override
