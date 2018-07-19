@@ -28,9 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
 {
-    //final String serverIP = "192.168.1.220";
-    final String serverIP = "192.168.1.109";
-    //final String serverIP = "10.1.10.72";
+    ServerInfo info;
     final String encodeFormat = "UTF-8";
     String userContactName;
 
@@ -39,6 +37,10 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        info = ServerInfo.getInstance();
+        info.setServerIP("192.168.1.220");
+        //info.setServerIP("192.168.1.109");
+        //info.setServerIP("10.1.10.72");
     }
 
     public void signUpClicked(View control)
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity
             data += "&" + URLEncoder.encode("method", "UTF-8") + "="
                     + URLEncoder.encode("login", "UTF-8");
 
-            String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
             checkLoginResponse(serverResponse);
         }
         catch (Exception e)
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity
             data += "&" + URLEncoder.encode("uid", "UTF-8") + "="
                     + URLEncoder.encode(uid.getText().toString(), "UTF-8");
 
-            String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
             userContactName = serverResponse;
         }
         catch (Exception e)

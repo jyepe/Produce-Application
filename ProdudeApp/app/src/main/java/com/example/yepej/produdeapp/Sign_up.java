@@ -18,9 +18,7 @@ public class Sign_up extends AppCompatActivity
 {
 
     String selectedState = "";
-    //final String serverIP = "192.168.1.220";
-    //final String serverIP = "192.168.1.109";
-    final String serverIP = "10.1.10.72";
+    ServerInfo info;
     final String encodeFormat = "UTF-8";
 
     @Override
@@ -28,6 +26,7 @@ public class Sign_up extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        info = ServerInfo.getInstance();
 
         Spinner spinner = (Spinner) findViewById(R.id.state);
 
@@ -100,7 +99,7 @@ public class Sign_up extends AppCompatActivity
 
 
                 //showMessageBox(selectedState);
-                String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+                String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
                 Log.i("test", serverResponse);
                 checkLoginResponse(serverResponse);
 

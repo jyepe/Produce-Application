@@ -1,5 +1,8 @@
 package com.example.yepej.produdeapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +33,8 @@ public class ItemList extends AppCompatActivity
 {
 
     final String encodeFormat = "UTF-8";
-    //final String serverIP = "10.1.10.72";
-    //final String serverIP = "192.168.1.220";
-    final String serverIP = "192.168.1.109";
+    ServerInfo info;
+
 
 
     String[] itemList;
@@ -53,6 +56,7 @@ public class ItemList extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
+        info = ServerInfo.getInstance();
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
 
@@ -70,7 +74,7 @@ public class ItemList extends AppCompatActivity
         try
         {
             String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("getItems", encodeFormat);
-            String serverResponse = sendPostData.execute("http://" + serverIP + "/ds.php", data).get();
+            String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
             parseResponse(serverResponse);
         }
         catch (Exception e)
@@ -131,6 +135,7 @@ public class ItemList extends AppCompatActivity
             {
                 convertView = getLayoutInflater().inflate(R.layout.custom_layout, null);
                 holder = new ViewHolder();
+
 
                 holder.holderText = ((TextView) convertView.findViewById(R.id.text));
                 holder.holderSpinner = ((Spinner) convertView.findViewById(R.id.spinner));
