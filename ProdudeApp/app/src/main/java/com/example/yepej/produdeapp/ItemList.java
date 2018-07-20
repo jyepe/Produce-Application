@@ -2,17 +2,23 @@ package com.example.yepej.produdeapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -21,6 +27,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,15 +41,8 @@ public class ItemList extends AppCompatActivity
 
     final String encodeFormat = "UTF-8";
     ServerInfo info;
-
-
-
     String[] itemList;
-
-    //I have the item list activity set to the default activity to skip the login. In your IDE go to
-    //run menu and edit configurations and select this activity as default for testing
-    // TODO: 7/12/2018 When spinner is scrolled off screen it resets the value of spinner (This is due to the getView method in the custom adapter class getting called and resetting values. We need to find a way to save the state of the spinner)
-    // TODO: 7/12/2018 Any other bugs in here you find
+    int[] selectionList;
 
 
     static class ViewHolder
@@ -57,14 +57,15 @@ public class ItemList extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         info = ServerInfo.getInstance();
+        info.setServerIP("192.168.1.109");
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
-
-
         getItems();
         CustomAdapter adapter = new CustomAdapter(itemList);
         listView.setAdapter(adapter);
     }
+
+
 
     //Gets all inventory items from DB
     private void getItems()
@@ -94,6 +95,8 @@ public class ItemList extends AppCompatActivity
         {
             itemList = m.group(1).split(",");
         }
+
+        selectionList = new int[itemList.length];
     }
 
     //region Custom Adapter
@@ -127,7 +130,7 @@ public class ItemList extends AppCompatActivity
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
+        public View getView(final int position, View convertView, ViewGroup parent)
         {
             ViewHolder holder = null;
 
@@ -148,11 +151,77 @@ public class ItemList extends AppCompatActivity
             }
 
             holder.holderText.setText(items[position]);
+            //Saves its position in listview as a tag
+            holder.holderSpinner.setTag(position);
+
+            //Sets the spinner that is being rendered to its saved selection
+            if (((int) holder.holderSpinner.getTag()) == position)
+            {
+                holder.holderSpinner.setSelection(selectionList[position]);
+            }
+
+            //Allows for ViewHolder to be passed into spinner listner
+            final ViewHolder finalHolder = holder;
+
+
+            holder.holderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
+                @Override
+                // TODO: 7/20/2018 change text of corresponding selected spinner i.e if spinner value > 0 
+                public void onItemSelected(AdapterView<?> parent, View view, int qtySelected, long id)
+                {
+                    int selectedItem = (int) finalHolder.holderSpinner.getTag();
+                    selectionList[selectedItem] = qtySelected;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent)
+                {
+
+                }
+            });
 
             return convertView;
         }
-
-
     }
     //endregion
+
+    //region Custom Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.custom_menu, menu);
+
+        return true;
+    }
+
+    @Override // TODO: 7/20/2018 finish sending to db and reading response 
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        try
+        {
+            String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("newOrder", encodeFormat);
+
+            for (int i = 0; i < selectionList.length; i++)
+            {
+                if (selectionList[i] != 0)
+                {
+                    PostSender sendPostData = new PostSender();
+                    data += "&" + URLEncoder.encode("item", encodeFormat) + "=" + URLEncoder.encode(itemList[i], encodeFormat);
+                    data += "&" + URLEncoder.encode("qty", encodeFormat) + "=" + URLEncoder.encode(Integer.toString(selectionList[i]), encodeFormat);
+                    String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
+                    Log.i("Test", serverResponse);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    //endregion
+
 }

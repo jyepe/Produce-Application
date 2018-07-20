@@ -1,6 +1,7 @@
 package com.example.yepej.produdeapp;
 
-public class ServerInfo{
+public class ServerInfo
+{
     private static ServerInfo serverInstance = null;
 
     // Global variable
@@ -16,8 +17,10 @@ public class ServerInfo{
         return this.serverIP;
     }
 
-    public static ServerInfo getInstance(){
-        if(serverInstance == null){
+    public static ServerInfo getInstance()
+    {
+        if(serverInstance == null)
+        {
             serverInstance = new ServerInfo();
         }
         return serverInstance;

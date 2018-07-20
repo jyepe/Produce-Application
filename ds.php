@@ -188,6 +188,14 @@
 		$conn->close();
 	}
 
+	function insertOrder() //todo insert order todb
+	{
+		global $conn;
+
+		$item = urldecode($_POST['item']);
+		$qty = urldecode($_POST['qty']);
+	}
+
 
 
 	if ($method == 'login')
@@ -205,6 +213,10 @@
 	else if ($method == 'getUser')
 	{
 		getUser();
+	}
+	else if ($method == 'newOrder')
+	{
+		insertOrder();
 	}
 
 ?>
