@@ -57,7 +57,7 @@ public class ItemList extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         info = ServerInfo.getInstance();
-        info.setServerIP("192.168.1.109");
+        //info.setServerIP("192.168.1.109");
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
         getItems();
@@ -199,29 +199,60 @@ public class ItemList extends AppCompatActivity
     @Override // TODO: 7/20/2018 finish sending to db and reading response 
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        showMessageBox("FYUCK YOU\n");
         try
         {
             String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("newOrder", encodeFormat);
 
+            showMessageBox(Integer.toString(selectionList.length));
             for (int i = 0; i < selectionList.length; i++)
             {
                 if (selectionList[i] != 0)
                 {
-                    PostSender sendPostData = new PostSender();
+                    showMessageBox(itemList[i] + selectionList[i]);
                     data += "&" + URLEncoder.encode("item", encodeFormat) + "=" + URLEncoder.encode(itemList[i], encodeFormat);
                     data += "&" + URLEncoder.encode("qty", encodeFormat) + "=" + URLEncoder.encode(Integer.toString(selectionList[i]), encodeFormat);
-                    String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
-                    Log.i("Test", serverResponse);
                 }
             }
+            PostSender sendPostData = new PostSender();
+            String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
+            showMessageBox("THIGNY:\n" + serverResponse);
+            Log.i("Test", serverResponse);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+        showMessageBox("THIGNY432432:\n");
 
         return super.onOptionsItemSelected(item);
     }
     //endregion
 
+
+    private void showMessageBox(String message)
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(message);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
 }
