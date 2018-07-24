@@ -47,6 +47,7 @@ public class ItemList extends AppCompatActivity
     int[] selectionList;
 
 
+    // TODO: 7/24/18 Get the ID of the user and set it as a global variable (similar to the ServerInfo class. Maybe in the same class with a different name) in order to use it when creating an order.
     static class ViewHolder
     {
         TextView holderText;
@@ -198,7 +199,7 @@ public class ItemList extends AppCompatActivity
         return true;
     }
 
-    @Override // TODO: 7/20/2018 finish sending to db and reading response 
+    @Override // TODO: 7/24/2018 finish sending to db and reading response. Send the ID for the company to DB with tag 'company'
     public boolean onOptionsItemSelected(MenuItem item)
     {
         try
