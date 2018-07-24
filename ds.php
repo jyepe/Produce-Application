@@ -1,5 +1,6 @@
 <?php
 
+
 	//Info to connect to DB
 	$servername = "localhost";
 	$dbusername = "jyepe";
@@ -7,12 +8,9 @@
 	//$dbusername = "root";
 	//$dbpassword = "password";
 	$dbname = "mydb";
-
 	//what method to execute
 	$method = urldecode($_POST['method']) ;
-
 	
-
 	// Create connection
 	$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
 
@@ -21,7 +19,6 @@
 	{
 	    die("connection failed");
 	}
-
 
 	function createUser()
 	{
@@ -39,14 +36,9 @@
 		$phone = urldecode($_POST['phone']) ;
 		$email = urldecode($_POST['email']) ;
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
 		$sqlCheck = "SELECT * FROM CUSTOMERS WHERE UID = '$username'";
-
 		$hashedPass = '';
-
 		$result = $conn->query($sqlCheck);
-
-
 		if ($result->num_rows > 0)
 		{
 			echo "user already exists";
@@ -81,7 +73,6 @@
 						, '$phone'
 						, '$email')
 						";
-
 			if ($conn->query($sql) === TRUE) 
 			{
 				echo "user created successfully";
@@ -90,12 +81,9 @@
 			{
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
-
 			$conn->close();
-
 			var_dump($hashed_password);
 		}
-
 	}
 	
 	function checkLogin ()
@@ -105,12 +93,8 @@
 		$password = urldecode($_POST['password']) ;
 		
 		$sql = "SELECT * FROM CUSTOMERS WHERE UID = '$username'";
-
 		$hashedPass = '';
-
 		$result = $conn->query($sql);
-
-
 		if ($result->num_rows > 0)
 		{
 			while($row = mysqli_fetch_assoc($result)) 
@@ -118,7 +102,6 @@
 				$hashedPass = $row["PASSWORD"];
 				break;
 			}
-
 			if (password_verify(($password), ($hashedPass)))
 			{
 				echo "login successful";
@@ -132,35 +115,28 @@
 		{
 			echo "user does not exist"; //Username may or may not exist
 		}
-
 		$conn->close();
-
 	}
 
 	function getItems()
 	{
 		global $conn;
-
 		$sql = "SELECT * FROM INVENTORY";
 		$result = $conn->query($sql);
-
 		if ($result->num_rows > 0) 
 		{
 			echo "start";
-
 	    	// output data of each row
 	    	while($row = $result->fetch_assoc()) 
 	    	{
         		echo $row["NAME"]. ",";
     		}
-
     		echo "end";
 		} 
 		else 
 		{
 		    echo "0 results";
 		}
-
 		$conn->close();
 	}
 
@@ -168,10 +144,8 @@
 	{
 		global $conn;
 		$userName = urldecode($_POST['uid']) ;
-
 		$sql = "SELECT CONTACT_NAME FROM CUSTOMERS WHERE UID = '$userName'";
 		$result = $conn->query($sql);
-
 		if ($result->num_rows > 0) 
 		{
 	    	// output data of each row
@@ -184,37 +158,37 @@
 		{
 		    echo "0 results";
 		}
-
 		$conn->close();
 	}
 
 	function insertOrder()
 	{
 		global $conn;
-
 		
 		$count = urldecode($_POST['count']);
 		
+		$sql = "
+		CALL NEW_ORDER(1, @ORDER_NUM);
+		";
+
 		for ($i = 1; $i <= $count; $i++)
 		{
 			$item = urldecode($_POST['item'. $i]);
 			$qty = urldecode($_POST['qty'. $i]);
-
-			$sql = "CALL NEW_ORDER()";
-
-			if ($conn->query($sql) === TRUE) 
-			{
-    			echo "New record created successfully";
-			} 
-			else 
-			{
-			    echo "Error: " . $sql . "<br>" . $conn->error;
-			}
+			$sql .= "
+		INSERT INTO 
+			";
 			
-			//echo $item;
+		}
+		if ($conn->query($sql) === TRUE) 
+		{
+			echo "New record created successfully";
+		} 
+		else 
+		{
+			echo "Error: " . $sql . "<br>" . $conn->error;
 		}
 	}
-
 
 
 	if ($method == 'login')
@@ -238,4 +212,4 @@
 		insertOrder();
 	}
 
-?>
+	?>
