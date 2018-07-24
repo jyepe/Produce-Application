@@ -188,12 +188,31 @@
 		$conn->close();
 	}
 
-	function insertOrder() //todo insert order todb
+	function insertOrder()
 	{
 		global $conn;
 
-		$item = urldecode($_POST['item']);
-		$qty = urldecode($_POST['qty']);
+		
+		$count = urldecode($_POST['count']);
+		
+		for ($i = 1; $i <= $count; $i++)
+		{
+			$item = urldecode($_POST['item'. $i]);
+			$qty = urldecode($_POST['qty'. $i]);
+
+			$sql = "CALL NEW_ORDER()";
+
+			if ($conn->query($sql) === TRUE) 
+			{
+    			echo "New record created successfully";
+			} 
+			else 
+			{
+			    echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			
+			//echo $item;
+		}
 	}
 
 

@@ -7,8 +7,10 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.os.Build.VERSION.*;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -199,31 +201,37 @@ public class ItemList extends AppCompatActivity
     @Override // TODO: 7/20/2018 finish sending to db and reading response 
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        showMessageBox("FYUCK YOU\n");
         try
         {
             String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("newOrder", encodeFormat);
+            int count = 0;
 
-            showMessageBox(Integer.toString(selectionList.length));
+
             for (int i = 0; i < selectionList.length; i++)
             {
                 if (selectionList[i] != 0)
                 {
-                    showMessageBox(itemList[i] + selectionList[i]);
-                    data += "&" + URLEncoder.encode("item", encodeFormat) + "=" + URLEncoder.encode(itemList[i], encodeFormat);
-                    data += "&" + URLEncoder.encode("qty", encodeFormat) + "=" + URLEncoder.encode(Integer.toString(selectionList[i]), encodeFormat);
+                    count++;
+                    data += "&" + URLEncoder.encode("item" + count, encodeFormat) + "=" + URLEncoder.encode(itemList[i], encodeFormat);
+                    data += "&" + URLEncoder.encode("qty" + count, encodeFormat) + "=" + URLEncoder.encode(Integer.toString(selectionList[i]), encodeFormat);
                 }
             }
+
+            data += "&" + URLEncoder.encode("count", encodeFormat) + "=" + URLEncoder.encode(Integer.toString(count), encodeFormat);
+
+
             PostSender sendPostData = new PostSender();
             String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
-            showMessageBox("THIGNY:\n" + serverResponse);
+
             Log.i("Test", serverResponse);
+
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        showMessageBox("THIGNY432432:\n");
+
 
         return super.onOptionsItemSelected(item);
     }
