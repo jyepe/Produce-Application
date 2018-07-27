@@ -3,10 +3,10 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "jyepe";
-	$dbpassword = "9373yepe";
-	//$dbusername = "root";
-	//$dbpassword = "password";
+	//$dbusername = "jyepe";
+	//$dbpassword = "9373yepe";
+	$dbusername = "root";
+	$dbpassword = "password";
 	$dbname = "mydb";
 	//what method to execute
 	$method = urldecode($_POST['method']) ;
@@ -20,7 +20,7 @@
 	    die("connection failed");
 	}
 
-	function createUser()
+	function addUser()
 	{
 		global $conn;
 		$compName = urldecode($_POST['compName']) ;
@@ -86,7 +86,7 @@
 		}
 	}
 	
-	function checkLogin ()
+	function login()
 	{
 		global $conn;
 		$username = urldecode($_POST['username']) ;
@@ -144,31 +144,34 @@
 	{
 		global $conn;
 		$userName = urldecode($_POST['uid']) ;
-		$sql = "SELECT CONTACT_NAME FROM CUSTOMERS WHERE UID = '$userName'";
+		$sql = "SELECT CONTACT_NAME, ID FROM CUSTOMERS WHERE UID = '$userName'";
 		$result = $conn->query($sql);
 		if ($result->num_rows > 0) 
 		{
 	    	// output data of each row
 	    	while($row = $result->fetch_assoc()) 
 	    	{
-        		echo $row["CONTACT_NAME"];
+        		echo "start:CONTACT_NAME" . $row["CONTACT_NAME"] . "end:CONTACT_NAME";
+        		echo "start:ID" . $row["ID"] . "end:ID";
     		}
-		} 
-		else 
+		}
+		else
 		{
 		    echo "0 results";
 		}
 		$conn->close();
 	}
 
+	//TODO: have the front end send all required items (TODO in ItemList file) and make sure everything works
 	function insertOrder()
 	{
 		global $conn;
 		
 		$count = urldecode($_POST['count']);
+		$company = urldecode($_POST['company']);
 		
 		$sql = "
-		CALL NEW_ORDER(1, @ORDER_NUM);
+		CALL NEW_ORDER(" . $company . ", @ORDER_NUM);
 		";
 
 		for ($i = 1; $i <= $count; $i++)
@@ -176,10 +179,12 @@
 			$item = urldecode($_POST['item'. $i]);
 			$qty = urldecode($_POST['qty'. $i]);
 			$sql .= "
-		INSERT INTO 
+			INSERT INTO ORDERS (ID, ITEM, QUANTITY, PRICE)
+			VALUES (@ORDER_NUM, (SELECT ID FROM INVENTORY WHERE NAME = '" . $item . "'), " . $qty . ", IFNULL((SELECT PRICE FROM INVENTORY WHERE NAME = '" . $item . "'));
 			";
 			
 		}
+
 		if ($conn->query($sql) === TRUE) 
 		{
 			echo "New record created successfully";
@@ -193,11 +198,11 @@
 
 	if ($method == 'login')
 	{
-		checkLogin();
+		login();
 	}
 	else if ($method == 'addUser')
 	{
-		createUser();
+		addUser();
 	}
 	else if ($method == 'getItems')
 	{
