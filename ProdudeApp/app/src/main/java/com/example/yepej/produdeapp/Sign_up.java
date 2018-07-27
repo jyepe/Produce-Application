@@ -18,7 +18,7 @@ public class Sign_up extends AppCompatActivity
 {
 
     String selectedState = "";
-    ServerInfo info;
+    InstanceInfo info;
     final String encodeFormat = "UTF-8";
 
     @Override
@@ -26,7 +26,7 @@ public class Sign_up extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        info = ServerInfo.getInstance();
+        info = InstanceInfo.getInstance();
 
         Spinner spinner = (Spinner) findViewById(R.id.state);
 

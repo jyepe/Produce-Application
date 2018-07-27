@@ -28,16 +28,15 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
 {
-    ServerInfo info;
+    InstanceInfo info;
     final String encodeFormat = "UTF-8";
-    String userContactName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        info = ServerInfo.getInstance();
+        info = InstanceInfo.getInstance();
         info.setServerIP("192.168.1.220");
         //info.setServerIP("192.168.1.109");
     }
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
             getUser();
             Intent myIntent = new Intent(this, OrderOption.class);
-            myIntent.putExtra("contactName", getUser());
+            myIntent.putExtra("contactName", info.getContactName());
             startActivity(myIntent);
         }
         else if (serverResponse.contains("wrong credentials") || serverResponse.contains("user does not exist"))
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private String getUser()
+    private void getUser()
     {
         PostSender sendPostData = new PostSender();
         EditText uid = ((EditText) findViewById(R.id.usernameText));
@@ -124,14 +123,17 @@ public class MainActivity extends AppCompatActivity
                     + URLEncoder.encode(uid.getText().toString(), "UTF-8");
 
             String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
-            userContactName = serverResponse;
+
+            String userContactName = serverResponse.substring(serverResponse.indexOf("start:CONTACT_NAME") + 18, serverResponse.indexOf("end:CONTACT_NAME"));
+            info.setContactName(userContactName);
+
+            String user_ID = serverResponse.substring(serverResponse.indexOf("start:ID") + 8, serverResponse.indexOf("end:ID"));
+            info.setUser_ID(user_ID);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-        return userContactName;
     }
     //endregion
 

@@ -42,12 +42,12 @@ public class ItemList extends AppCompatActivity
 {
 
     final String encodeFormat = "UTF-8";
-    ServerInfo info;
+    InstanceInfo info;
     String[] itemList;
     int[] selectionList;
 
 
-    // TODO: 7/24/18 Get the ID of the user and set it as a global variable (similar to the ServerInfo class. Maybe in the same class with a different name) in order to use it when creating an order.
+    // TODO: 7/24/18 Send the ID (info.getUser_ID())of the user along with the items to use it when creating an order.
     static class ViewHolder
     {
         TextView holderText;
@@ -59,7 +59,7 @@ public class ItemList extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-        info = ServerInfo.getInstance();
+        info = InstanceInfo.getInstance();
         //info.setServerIP("192.168.1.109");
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
