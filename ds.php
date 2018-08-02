@@ -3,11 +3,12 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	//$dbusername = "jyepe";
-	//$dbpassword = "9373yepe";
-	$dbusername = "root";
-	$dbpassword = "password";
+	$dbusername = "jyepe";
+	$dbpassword = "9373yepe";
+	//$dbusername = "root";
+	//$dbpassword = "password";
 	$dbname = "mydb";
+
 	//what method to execute
 	$method = urldecode($_POST['method']) ;
 	
@@ -39,6 +40,7 @@
 		$sqlCheck = "SELECT * FROM CUSTOMERS WHERE UID = '$username'";
 		$hashedPass = '';
 		$result = $conn->query($sqlCheck);
+
 		if ($result->num_rows > 0)
 		{
 			echo "user already exists";
@@ -81,6 +83,7 @@
 			{
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
+
 			$conn->close();
 			var_dump($hashed_password);
 		}
@@ -146,6 +149,7 @@
 		$userName = urldecode($_POST['uid']) ;
 		$sql = "SELECT CONTACT_NAME, ID FROM CUSTOMERS WHERE UID = '$userName'";
 		$result = $conn->query($sql);
+
 		if ($result->num_rows > 0) 
 		{
 	    	// output data of each row
@@ -169,29 +173,50 @@
 		
 		$count = urldecode($_POST['count']);
 		$company = urldecode($_POST['company']);
+		$flag = 1;
 		
 		$sql = "
 		CALL NEW_ORDER(" . $company . ", @ORDER_NUM);
 		";
 
+		if ($conn->query($sql) === TRUE) 
+		{
+			//echo "New record created successfully";
+		} 
+		else 
+		{
+			$flag = 0;
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
 		for ($i = 1; $i <= $count; $i++)
 		{
 			$item = urldecode($_POST['item'. $i]);
 			$qty = urldecode($_POST['qty'. $i]);
-			$sql .= "
+			$sql = "
 			INSERT INTO ORDERS (ID, ITEM, QUANTITY, PRICE)
-			VALUES (@ORDER_NUM, (SELECT ID FROM INVENTORY WHERE NAME = '" . $item . "'), " . $qty . ", IFNULL((SELECT PRICE FROM INVENTORY WHERE NAME = '" . $item . "'));
+			VALUES (@ORDER_NUM, (SELECT ID FROM INVENTORY WHERE NAME = '" . $item . "'), " . $qty . ", IFNULL((SELECT PRICE FROM INVENTORY WHERE NAME = '" . $item . "'), 0.00));
 			";
-			
+
+			if ($conn->query($sql) === TRUE) 
+			{
+				//echo "New record created successfully";
+			} 
+			else 
+			{
+				$flag = 0;
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+				
 		}
 
-		if ($conn->query($sql) === TRUE) 
+		if ($flag == 1)
 		{
-			echo "New record created successfully";
-		} 
-		else 
+			echo "success";
+		}
+		else
 		{
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "error";
 		}
 	}
 
@@ -217,4 +242,4 @@
 		insertOrder();
 	}
 
-	?>
+?>

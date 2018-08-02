@@ -45,9 +45,10 @@ public class ItemList extends AppCompatActivity
     InstanceInfo info;
     String[] itemList;
     int[] selectionList;
+    int[] colorList;
 
 
-    // TODO: 7/24/18 Send the ID (info.getUser_ID())of the user along with the items to use it when creating an order.
+
     static class ViewHolder
     {
         TextView holderText;
@@ -60,13 +61,14 @@ public class ItemList extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         info = InstanceInfo.getInstance();
-        //info.setServerIP("192.168.1.109");
 
         ListView listView = ((ListView) findViewById(R.id.itemListView));
         getItems();
+        setColorsList();
         CustomAdapter adapter = new CustomAdapter(itemList);
         listView.setAdapter(adapter);
     }
+
 
 
 
@@ -100,6 +102,16 @@ public class ItemList extends AppCompatActivity
         }
 
         selectionList = new int[itemList.length];
+        colorList = new int[itemList.length];
+    }
+
+    //Sets all elements in the colors array to black
+    private void setColorsList()
+    {
+        for (int i = 0; i < colorList.length; i++)
+        {
+            colorList[i] = Color.BLACK;
+        }
     }
 
     //region Custom Adapter
@@ -154,6 +166,7 @@ public class ItemList extends AppCompatActivity
             }
 
             holder.holderText.setText(items[position]);
+            holder.holderText.setTag(position);
             //Saves its position in listview as a tag
             holder.holderSpinner.setTag(position);
 
@@ -161,6 +174,7 @@ public class ItemList extends AppCompatActivity
             if (((int) holder.holderSpinner.getTag()) == position)
             {
                 holder.holderSpinner.setSelection(selectionList[position]);
+                holder.holderText.setTextColor(colorList[position]);
             }
 
             //Allows for ViewHolder to be passed into spinner listner
@@ -174,6 +188,16 @@ public class ItemList extends AppCompatActivity
                 public void onItemSelected(AdapterView<?> parent, View view, int qtySelected, long id)
                 {
                     int selectedItem = (int) finalHolder.holderSpinner.getTag();
+
+                    if ((int)finalHolder.holderText.getTag() == selectedItem && qtySelected > 0)
+                    {
+                        finalHolder.holderText.setTextColor(Color.RED);
+                    }
+                    else
+                    {
+                        finalHolder.holderText.setTextColor(Color.BLACK);
+                    }
+
                     selectionList[selectedItem] = qtySelected;
                 }
 
@@ -199,12 +223,13 @@ public class ItemList extends AppCompatActivity
         return true;
     }
 
-    @Override // TODO: 7/24/2018 finish sending to db and reading response. Send the ID for the company to DB with tag 'company'
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         try
         {
             String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("newOrder", encodeFormat);
+            data += "&" + URLEncoder.encode("company", encodeFormat) + "=" + URLEncoder.encode(info.getUser_ID(), encodeFormat);
             int count = 0;
 
 
@@ -223,10 +248,8 @@ public class ItemList extends AppCompatActivity
 
             PostSender sendPostData = new PostSender();
             String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
-
-            Log.i("Test", serverResponse);
-
-
+            Log.i("test", serverResponse);
+            checkServerResponse(serverResponse);
         }
         catch (Exception e)
         {
@@ -235,6 +258,18 @@ public class ItemList extends AppCompatActivity
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void checkServerResponse(String response)
+    {
+        if (response.trim().equalsIgnoreCase("success"))
+        {
+            Toast.makeText(this, "Order complete", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Error in creating order.", Toast.LENGTH_SHORT).show();
+        }
     }
     //endregion
 

@@ -8,6 +8,7 @@ public class InstanceInfo
     private String serverIP;
     private String user_ID;
     private String contactName;
+    private String companyId;
 
     // Restrict the constructor from being instantiated
     private InstanceInfo(){}
