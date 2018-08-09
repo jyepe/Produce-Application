@@ -1,6 +1,5 @@
 <?php
 
-
 	//Info to connect to DB
 	$servername = "localhost";
 	$dbusername = "jyepe";
@@ -124,8 +123,21 @@
 	function getItems()
 	{
 		global $conn;
-		$sql = "SELECT * FROM INVENTORY";
+		$sql = "";
+
+		if (urldecode($_POST['type']) == 'getOnHand')
+		{
+			$sql = "SELECT NAME, IFNULL( ON_HAND, 0) AS ON_HAND
+					FROM INVENTORY";
+		}
+		else
+		{
+			$sql = "SELECT * FROM INVENTORY";
+		}
+
+		
 		$result = $conn->query($sql);
+
 		if ($result->num_rows > 0) 
 		{
 			echo "start";
@@ -133,13 +145,21 @@
 	    	while($row = $result->fetch_assoc()) 
 	    	{
         		echo $row["NAME"]. ",";
+
+        		if (urldecode($_POST['type']) == 'getOnHand')
+				{
+					echo $row["ON_HAND"]. "\n";
+				}
     		}
+
     		echo "end";
 		} 
 		else 
 		{
 		    echo "0 results";
 		}
+		
+
 		$conn->close();
 	}
 
@@ -166,7 +186,7 @@
 		$conn->close();
 	}
 
-	//TODO: have the front end send all required items (TODO in ItemList file) and make sure everything works
+	
 	function insertOrder()
 	{
 		global $conn;
@@ -218,6 +238,83 @@
 		{
 			echo "error";
 		}
+
+		$conn->close();
+	}
+
+	function getMasterOrders()
+	{
+		global $conn;
+
+		$sql = "SELECT CONTACT_NAME, master_orders.ID, sum(PRICE) as TOTAL_PRICE, COMPANY_NAME
+				FROM master_orders JOIN customers ON master_orders.CUSTOMER = customers.ID
+				                   JOIN orders ON master_orders.ID = orders.ID
+                   
+				GROUP BY ID";
+
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+        		echo $row["CONTACT_NAME"] . ",";
+        		echo $row["ID"] . ",";
+        		echo $row["TOTAL_PRICE"] . ",";
+        		echo $row["COMPANY_NAME"] . "\n";
+    		}
+		}
+		else
+		{
+		    echo "0 results";
+		}
+
+		$conn->close();
+	}
+
+	function getOrders()
+	{
+		global $conn;
+
+		$order_id = urldecode($_POST['orderID']);
+
+		$sql = "SET @ORDER_ID = $order_id;";
+
+		if ($conn->query($sql) === TRUE) 
+		{
+			//echo "New record created successfully";
+		} 
+		else 
+		{
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
+		$sql = "SELECT CONTACT_NAME, orders.PRICE, QUANTITY, NAME
+				FROM master_orders JOIN customers ON master_orders.CUSTOMER = customers.ID
+                   				   JOIN orders ON orders.ID = master_orders.ID
+                                   JOIN inventory ON orders.ITEM = inventory.ID
+				WHERE master_orders.CUSTOMER = customers.ID AND orders.ID = @ORDER_ID";
+
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+        		echo $row["NAME"] . ",";
+        		echo $row["QUANTITY"] . ",";
+        		echo $row["PRICE"] . "\n";
+    		}
+		}
+		else
+		{
+		    echo "0 results";
+		}
+
+		$conn->close();
+
 	}
 
 
@@ -240,6 +337,14 @@
 	else if ($method == 'newOrder')
 	{
 		insertOrder();
+	}
+	else if ($method == 'getMasterOrders')
+	{
+		getMasterOrders();
+	}
+	else if ($method == 'getOrders')
+	{
+		getOrders();
 	}
 
 ?>
