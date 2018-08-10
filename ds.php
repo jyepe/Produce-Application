@@ -317,6 +317,45 @@
 
 	}
 
+	function updateInventory()
+	{
+		global $conn;
+		$flag = 1;
+		
+		$count = urldecode($_POST['count']) ;
+
+		for ($i=1; $i <= $count; $i++) 
+		{ 
+			$quantity = urldecode($_POST['qty' . $i]) ;
+			$id = urldecode($_POST['itemID' . $i]) ;
+
+			$sql = "UPDATE INVENTORY
+				SET ON_HAND = $quantity
+				WHERE ID = $id;";
+
+			if ($conn->query($sql) === TRUE) 
+			{
+	    		//echo "success";
+			} 
+			else 
+			{
+				$flag = 0;
+	    		//echo "Error updating record: " . $conn->error;
+			}
+		}
+
+		if ($flag == 1)
+		{
+			echo "success";
+		}
+		else
+		{
+			echo "error";
+		}
+
+		$conn->close();
+	}
+
 
 	if ($method == 'login')
 	{
@@ -345,6 +384,10 @@
 	else if ($method == 'getOrders')
 	{
 		getOrders();
+	}
+	else if ($method == 'updateInventory')
+	{
+		updateInventory();
 	}
 
 ?>

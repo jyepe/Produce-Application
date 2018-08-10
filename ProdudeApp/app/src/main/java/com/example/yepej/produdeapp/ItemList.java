@@ -80,6 +80,7 @@ public class ItemList extends AppCompatActivity
         try
         {
             String data = URLEncoder.encode("method", encodeFormat) + "=" + URLEncoder.encode("getItems", encodeFormat);
+            data += "&" + URLEncoder.encode("type", encodeFormat) + "=" + URLEncoder.encode("", encodeFormat);
             String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
             parseResponse(serverResponse);
         }
