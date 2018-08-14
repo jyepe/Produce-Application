@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         info = InstanceInfo.getInstance();
         //info.setServerIP("192.168.1.220");
-        info.setServerIP("192.168.1.109");
-        //info.setServerIP("10.1.10.72");
+        //info.setServerIP("192.168.1.109");
+        info.setServerIP("10.1.10.72");
     }
 
     public void signUpClicked(View control)

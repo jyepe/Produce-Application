@@ -329,8 +329,20 @@
 			$quantity = urldecode($_POST['qty' . $i]) ;
 			$id = urldecode($_POST['itemID' . $i]) ;
 
+			$sql = "SET @CURRENT_QTY = (SELECT ON_HAND FROM INVENTORY WHERE ID = $id);";
+
+			if ($conn->query($sql) === TRUE) 
+			{
+	    		//echo "success";
+			} 
+			else 
+			{
+				$flag = 0;
+	    		//echo "Error updating record: " . $conn->error;
+			}
+
 			$sql = "UPDATE INVENTORY
-				SET ON_HAND = $quantity
+				SET ON_HAND = $quantity + @CURRENT_QTY
 				WHERE ID = $id;";
 
 			if ($conn->query($sql) === TRUE) 
