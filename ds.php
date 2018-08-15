@@ -2,10 +2,10 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	$dbusername = "jyepe";
-	$dbpassword = "9373yepe";
-	//$dbusername = "root";
-	//$dbpassword = "password";
+	//$dbusername = "jyepe";
+	//$dbpassword = "9373yepe";
+	$dbusername = "root";
+	$dbpassword = "password";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -186,7 +186,6 @@
 		$conn->close();
 	}
 
-	
 	function insertOrder()
 	{
 		global $conn;
@@ -329,20 +328,8 @@
 			$quantity = urldecode($_POST['qty' . $i]) ;
 			$id = urldecode($_POST['itemID' . $i]) ;
 
-			$sql = "SET @CURRENT_QTY = (SELECT ON_HAND FROM INVENTORY WHERE ID = $id);";
-
-			if ($conn->query($sql) === TRUE) 
-			{
-	    		//echo "success";
-			} 
-			else 
-			{
-				$flag = 0;
-	    		//echo "Error updating record: " . $conn->error;
-			}
-
 			$sql = "UPDATE INVENTORY
-				SET ON_HAND = $quantity + @CURRENT_QTY
+				SET ON_HAND = $quantity
 				WHERE ID = $id;";
 
 			if ($conn->query($sql) === TRUE) 
@@ -368,6 +355,121 @@
 		$conn->close();
 	}
 
+	function getUserOrders()
+	{
+		global $conn;
+
+		$customer = urldecode($_POST['ID']);
+
+		$sql = "SET @CUSTOMER = $customer;";
+
+		if ($conn->query($sql) === TRUE) 
+		{
+			//echo "New record created successfully";
+		} 
+		else 
+		{
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
+		$sql = "
+		SELECT 
+			CONCAT('ORDER #: ',  ID, '   ', DATE_FORMAT(TIME, \"%M %D, %Y\")) AS INFO
+		FROM
+			MASTER_ORDERS
+		WHERE
+			CUSTOMER = $customer;";
+
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+			echo "start:INFO"; 
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+				echo $row["INFO"] . "-";
+    		}
+			echo "end:INFO";
+		}
+		else
+		{
+		    echo "0 results";
+		}
+
+		$conn->close();
+	}
+
+	function getSingleOrder()
+	{
+		global $conn;
+
+		$order = urldecode($_POST['ID']);
+
+		$sql = "
+		SET @ORDER_ID = $order;
+			";
+
+		if ($conn->query($sql) === FALSE) {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
+		$sql = "
+		SELECT
+			CONCAT(
+			INVENTORY.NAME, '  (',
+			ORDERS.QUANTITY, ' x $',
+			ORDERS.PRICE, ')   =  $',
+			(ORDERS.QUANTITY * ORDERS.PRICE)
+			) AS ITEM
+		FROM
+			ORDERS JOIN INVENTORY ON ORDERS.ITEM = INVENTORY.ID
+		WHERE
+			ORDERS.ID = @ORDER_ID;";
+
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+			echo "start:ITEM"; 
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+				echo $row["ITEM"] . "-";
+    		}
+			echo "end:ITEM";
+		}
+		else
+		{
+		    echo "0 results";
+		}
+
+		$sql = "
+		SELECT
+			SUM(QUANTITY * PRICE) AS TOTAL
+		FROM
+			ORDERS
+		WHERE
+			ORDERS.ID = @ORDER_ID;";
+	
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+			echo "start:TOTAL"; 
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+				echo $row["TOTAL"];
+    		}
+			echo "end:TOTAL";
+		}
+		else
+		{
+		    echo "0 results";
+		}
+
+	}
 
 	if ($method == 'login')
 	{
@@ -400,6 +502,14 @@
 	else if ($method == 'updateInventory')
 	{
 		updateInventory();
+	}
+	else if ($method == 'getUserOrders')
+	{
+		getUserOrders();
+	}
+	else if ($method == 'getSingleOrder')
+	{
+		getSingleOrder();
 	}
 
 ?>
