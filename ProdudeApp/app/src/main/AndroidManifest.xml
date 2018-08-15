@@ -27,6 +27,8 @@
 
         <activity android:name=".Sign_up"></activity>
         <activity android:name=".OrderOption"></activity>
+        <activity android:name=".OrderHistory"></activity>
+        <activity android:name=".SingleOrder"></activity>
         <activity android:name=".ItemList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

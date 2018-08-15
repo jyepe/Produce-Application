@@ -29,8 +29,9 @@ public class OrderOption extends AppCompatActivity
 
     private void showOptions()
     {
-        final Intent myIntent = new Intent(this, ItemList.class);
 
+        final Intent itemList = new Intent(this, ItemList.class);
+        final Intent previousOrders = new Intent(this, OrderHistory.class);
 
         ListView optionView = ((ListView) findViewById(R.id.optionList));
 
@@ -51,7 +52,11 @@ public class OrderOption extends AppCompatActivity
                 if (position == 0)
                 {
                     //start item list activity
-                    startActivity(myIntent);
+                    startActivity(itemList);
+                }
+                else if (position == 1)
+                {
+                    startActivity(previousOrders);
                 }
             }
         });
