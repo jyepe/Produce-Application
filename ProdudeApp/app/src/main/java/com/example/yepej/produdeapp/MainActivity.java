@@ -31,16 +31,14 @@ public class MainActivity extends AppCompatActivity
     InstanceInfo info;
     final String encodeFormat = "UTF-8";
 
-    // TODO: 8/1/2018 work on order history for customers 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         info = InstanceInfo.getInstance();
-        info.setServerIP("192.168.1.220");
-        //info.setServerIP("192.168.1.109");
+        //info.setServerIP("192.168.1.220");
+        info.setServerIP("192.168.1.109");
         //info.setServerIP("10.1.10.72");
     }
 

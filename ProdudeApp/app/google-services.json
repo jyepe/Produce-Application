@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "137856340176",
+    "firebase_url": "https://fir-messaging-3c492.firebaseio.com",
+    "project_id": "fir-messaging-3c492",
+    "storage_bucket": "fir-messaging-3c492.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137856340176:android:8a97ba4d79e4a70b",
+        "android_client_info": {
+          "package_name": "com.example.yepej.greenseasons"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137856340176-o0aq83mpcuhtokpa06e8om5sjht0loq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr5OUvZx2VcW2wUWedIXBHQAPGIPnPuXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137856340176:android:2527d40046c8291d",
+        "android_client_info": {
+          "package_name": "com.example.yepej.produdeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137856340176-o0aq83mpcuhtokpa06e8om5sjht0loq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr5OUvZx2VcW2wUWedIXBHQAPGIPnPuXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

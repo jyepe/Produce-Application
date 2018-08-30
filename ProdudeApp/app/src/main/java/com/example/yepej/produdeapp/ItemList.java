@@ -2,41 +2,27 @@ package com.example.yepej.produdeapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.os.Build.VERSION.*;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
+import com.firebase.client.Firebase;
+
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
 
 public class ItemList extends AppCompatActivity
 {
@@ -185,7 +171,7 @@ public class ItemList extends AppCompatActivity
             holder.holderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
             {
                 @Override
-                // TODO: 7/20/2018 change text of corresponding selected spinner i.e if spinner value > 0 
+
                 public void onItemSelected(AdapterView<?> parent, View view, int qtySelected, long id)
                 {
                     int selectedItem = (int) finalHolder.holderSpinner.getTag();
@@ -265,6 +251,21 @@ public class ItemList extends AppCompatActivity
     {
         if (response.trim().equalsIgnoreCase("success"))
         {
+            PostSender sendPostData = new PostSender();
+
+            try
+            {
+                String data = URLEncoder.encode("method", "UTF-8") + "=" + URLEncoder.encode("sendNotification", "UTF-8");
+                data += "&" + URLEncoder.encode("ID", "UTF-8") + "=" + URLEncoder.encode(info.getToken(), "UTF-8");
+                String serverResponse = sendPostData.execute("http://" + info.getServerIP() + "/ds.php", data).get();
+                Log.i("response", serverResponse);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+
             Toast.makeText(this, "Order complete", Toast.LENGTH_SHORT).show();
         }
         else

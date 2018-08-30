@@ -38,7 +38,7 @@ public class SingleOrder extends AppCompatActivity {
 
         headerView.setText(getIntent().getStringExtra("Header"));
 
-        showMessageBox(orderID);
+        //showMessageBox(orderID);
 
         getOrderItems();
 

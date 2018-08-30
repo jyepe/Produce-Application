@@ -9,6 +9,7 @@ public class InstanceInfo
     private String user_ID;
     private String contactName;
     private String companyId;
+    private String token;
 
     // Restrict the constructor from being instantiated
     private InstanceInfo(){}
@@ -30,4 +31,13 @@ public class InstanceInfo
     public void setUser_ID(String userID) { this.user_ID = userID; }
     public String getContactName() { return contactName; }
     public void setContactName(String contactName) { this.contactName = contactName; }
+    public String getToken ()
+    {
+        return token;
+    }
+
+    public void setToken (String token)
+    {
+        this.token = token;
+    }
 }

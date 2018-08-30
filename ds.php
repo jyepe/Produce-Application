@@ -2,10 +2,10 @@
 
 	//Info to connect to DB
 	$servername = "localhost";
-	//$dbusername = "jyepe";
-	//$dbpassword = "9373yepe";
-	$dbusername = "root";
-	$dbpassword = "password";
+	$dbusername = "jyepe";
+	$dbpassword = "9373yepe";
+	//$dbusername = "root";
+	//$dbpassword = "password";
 	$dbname = "mydb";
 
 	//what method to execute
@@ -322,16 +322,23 @@
 		$flag = 1;
 		
 		$count = urldecode($_POST['count']) ;
-
 		for ($i=1; $i <= $count; $i++) 
 		{ 
 			$quantity = urldecode($_POST['qty' . $i]) ;
 			$id = urldecode($_POST['itemID' . $i]) ;
-
+			$sql = "SET @CURRENT_QTY = (SELECT ON_HAND FROM INVENTORY WHERE ID = $id);";
+			if ($conn->query($sql) === TRUE) 
+			{
+	    		//echo "success";
+			} 
+			else 
+			{
+				$flag = 0;
+	    		//echo "Error updating record: " . $conn->error;
+			}
 			$sql = "UPDATE INVENTORY
-				SET ON_HAND = $quantity
+				SET ON_HAND = $quantity + @CURRENT_QTY
 				WHERE ID = $id;";
-
 			if ($conn->query($sql) === TRUE) 
 			{
 	    		//echo "success";
@@ -342,7 +349,6 @@
 	    		//echo "Error updating record: " . $conn->error;
 			}
 		}
-
 		if ($flag == 1)
 		{
 			echo "success";
@@ -351,7 +357,6 @@
 		{
 			echo "error";
 		}
-
 		$conn->close();
 	}
 
@@ -471,6 +476,50 @@
 
 	}
 
+	function sendNotification()
+	{
+		
+		#API access key from Google API's Console
+   		define( 'API_ACCESS_KEY', 'AAAAIBjg0NA:APA91bGQ3U4XKME5PB2vKtGdFdnIOg-JRejdU4R5le_-yRzhHaAJ7ppWYPap4iEBY2ksGqGz88EZvivYgwMcwgeSjUkv3eVYORh42mQa4A-0gXY4ijb8-9b8GAji_FRibtNv73m2TcgEseIOgWCagfxS8tKaTeeBUQ' );
+
+    	$registrationIds = urldecode($_POST['ID']);
+
+		#prep the bundle
+     	//$msg = array
+        //(
+    	//	'body' 	=> 'Body  Of Notification',
+		//	'title'	=> 'Title Of Notification'
+        //);
+
+	    $fields = array
+		(
+			'to'		=> $registrationIds
+			//'notification'	=> $msg
+		);
+	
+	
+		$headers = array
+		(
+			'Authorization: key=' . API_ACCESS_KEY,
+			'Content-Type: application/json'
+		);
+
+		#Send Reponse To FireBase Server	
+		$ch = curl_init();
+		curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+		curl_setopt( $ch,CURLOPT_POST, true );
+		curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+		curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+		curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+		$result = curl_exec($ch );
+		curl_close( $ch );
+
+		#Echo Result Of FireBase Server
+		echo $result;
+
+	}
+
 	if ($method == 'login')
 	{
 		login();
@@ -510,6 +559,10 @@
 	else if ($method == 'getSingleOrder')
 	{
 		getSingleOrder();
+	}
+	else if ($method == 'sendNotification')
+	{
+		sendNotification();
 	}
 
 ?>
