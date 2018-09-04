@@ -24,6 +24,7 @@ public class Sign_up extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         info = InstanceInfo.getInstance();

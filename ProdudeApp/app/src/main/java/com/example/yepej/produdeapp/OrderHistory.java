@@ -30,7 +30,9 @@ public class OrderHistory extends AppCompatActivity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
         info = InstanceInfo.getInstance();

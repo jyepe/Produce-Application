@@ -44,6 +44,7 @@ public class ItemList extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         info = InstanceInfo.getInstance();
