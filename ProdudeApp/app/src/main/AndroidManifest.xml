@@ -17,14 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme2">
 
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
         <activity android:name=".Sign_up"></activity>
         <activity android:name=".OrderOption"></activity>
         <activity android:name=".OrderHistory"></activity>
         <activity android:name=".SingleOrder"></activity>
         <activity android:name=".ItemList"></activity>
-        <activity android:name=".GreetingsActivity">
+        <activity android:name=".GreetingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

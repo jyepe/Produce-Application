@@ -17,6 +17,7 @@ public class BaseApplication extends Application
     public void onCreate()
     {
         info = InstanceInfo.getInstance();
+        info.setServerIP("192.168.1.109");
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         DatabaseReference clientToken = ref.child("Client Token");
 

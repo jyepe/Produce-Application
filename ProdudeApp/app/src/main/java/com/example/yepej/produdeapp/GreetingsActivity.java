@@ -23,7 +23,7 @@ public class GreetingsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_greetings);
-
+        info = InstanceInfo.getInstance();
 
         animateActivity();
     }
