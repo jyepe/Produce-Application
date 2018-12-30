@@ -245,7 +245,7 @@
 	{
 		global $conn;
 
-		$sql = "SELECT CONTACT_NAME, master_orders.ID, sum(PRICE) as TOTAL_PRICE, COMPANY_NAME
+		$sql = "SELECT CONTACT_NAME, master_orders.ID, sum(PRICE * QUANTITY) as TOTAL_PRICE, COMPANY_NAME
 				FROM master_orders JOIN customers ON master_orders.CUSTOMER = customers.ID
 				                   JOIN orders ON master_orders.ID = orders.ID
                    
@@ -520,6 +520,28 @@
 
 	}
 
+	function getCompanies()
+	{
+		global $conn;
+
+		$sql = "SELECT COMPANY_NAME FROM CUSTOMERS";
+		$result = $conn->query($sql);
+
+		if ($result->num_rows > 0) 
+		{
+	    	// output data of each row
+	    	while($row = $result->fetch_assoc()) 
+	    	{
+        		echo $row["COMPANY_NAME"]. "\n";
+    		}
+		}
+		else
+		{
+		    echo "0 results";
+		}
+		$conn->close();
+	}
+
 	if ($method == 'login')
 	{
 		login();
@@ -563,6 +585,10 @@
 	else if ($method == 'sendNotification')
 	{
 		sendNotification();
+	}
+	else if ($method == 'getCompanies')
+	{
+		getCompanies();
 	}
 
 ?>
